@@ -320,16 +320,16 @@ scanpipe(struct scanner *s, int n)
 		return 0;
 	next(s);
 	if (s->chr != '|') {
-		if (!(n & 1))
+		if (!(n & PIPE1))
 			scanerror(s, "expected '||'");
 		space(s);
-		return 1;
+		return PIPE1;
 	}
-	if (!(n & 2))
+	if (!(n & PIPE2))
 		scanerror(s, "unexpected '||'");
 	next(s);
 	space(s);
-	return 2;
+	return PIPE2;
 }
 
 bool
