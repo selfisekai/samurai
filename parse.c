@@ -86,15 +86,20 @@ parseedge(struct scanner *s, struct environment *env)
 	free(name);
 	scanpaths(s);
 	e->inimpidx = npaths - e->nout;
-	p = scanpipe(s, PIPE1 | PIPE2);
+	p = scanpipe(s, PIPE1 | PIPE2 | PIPEAT);
 	if (p == PIPE1) {
 		scanpaths(s);
-		p = scanpipe(s, PIPE2);
+		p = scanpipe(s, PIPE2 | PIPEAT);
 	}
 	e->inorderidx = npaths - e->nout;
-	if (p == PIPE2)
+	if (p == PIPE2) {
 		scanpaths(s);
+		p = scanpipe(s, PIPEAT);
+	}
 	e->nin = npaths - e->nout;
+	if (p == PIPEAT) {
+		scanpaths(s);
+	}
 	scannewline(s);
 	while (scanindent(s)) {
 		name = scanname(s);
