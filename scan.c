@@ -320,10 +320,25 @@ scanpipe(struct scanner *s, int n)
 		return 0;
 	next(s);
 	if (s->chr != '|') {
-		if (!(n & PIPE1))
-			scanerror(s, "expected '||'");
+	    int r = PIPE1;
+	    if (s->chr == '@') {
+			if (!(n & PIPEAT))
+			    scanerror(s, "unexpected '|@'");
+			next(s);
+			r = PIPEAT;
+		} else if (!(n & PIPE1)) {
+			char* msg;
+			if (n & PIPE2) {
+			    if (n & PIPEAT)
+					msg = "expected '||' or '|@'";
+			    else
+					msg = "expected '||'";
+			} else
+				msg = "expected '|@'";
+			scanerror(s, msg);
+		}
 		space(s);
-		return PIPE1;
+		return r;
 	}
 	if (!(n & PIPE2))
 		scanerror(s, "unexpected '||'");

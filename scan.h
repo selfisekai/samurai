@@ -23,6 +23,7 @@ void scanclose(struct scanner *);
 enum pipe {
     PIPE1 = 1 << 0,
     PIPE2 = 1 << 1,
+    PIPEAT = 1 << 2,
 };
 
 void scanerror(struct scanner *, const char *, ...);
